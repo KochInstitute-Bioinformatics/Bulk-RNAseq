@@ -15,7 +15,7 @@ The analysis pipeline includes the following components:
 
 4. **Data Annotation and Filtering**: Annotating and filtering the gene-level data.
 
-5. **Differential Expression Analysis**: Performing differential expression analysis and generating results.
+5. **Differential Expression Analysis**: Performing differential expression analysis and generating results for simple model (~Condition) or complex model with batch effect (~Batch + Condition).
 
 6. **Principal Component Analysis (PCA)**: Performing PCA for exploratory data analysis.
 
