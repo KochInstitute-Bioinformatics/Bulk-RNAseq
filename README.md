@@ -1,6 +1,6 @@
 # Bulk-RNAseq data analysis
 
-This repository contains a Template folder with scripts and functions for analyzing any RNA-Seq dataset from Human and Mouse, including differential expression analysis, PCA, and data visualization. The pipeline is designed to facilitate the processing and analysis of RNA-Seq data, starting from importing quantification results to generating figures and statistical analysis. 
+This repository contains scripts and functions for analyzing any RNA-Seq dataset from Human and Mouse, including differential expression analysis, PCA, and data visualization. The pipeline is designed to facilitate the processing and analysis of RNA-Seq data, starting from importing quantification results to generating figures and statistical analysis. 
 It assumes that you have already run the nf-core pipeline and pre-processed the FASTQ files.
 
 ## Overview
