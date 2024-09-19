@@ -229,6 +229,102 @@ dds <- DESeqDataSetFromTximport(txi = txi,
 dds$Infection <- relevel(dds$Infection, "Mock")
 ```
 
+### Prepare an exploratory PCA plot
+
+By default, plotPCA using the 500 most variable genes for PCA 1 vs PCA 2 plots
+this can be adjusted with ntop argument
+
+```{r}
+vsd <- vst(dds, blind=FALSE)
+ 
+samples$Day <- as.factor(samples$Day)
+ 
+plotPCA(vsd, intgroup="Condition", ntop=500) + geom_point(size = 4) + ggtitle("Condition")
+plotPCA(vsd, intgroup="Infection", ntop=500) + geom_point(size = 4) + ggtitle("Infection")
+plotPCA(vsd, intgroup="Run", ntop=500) + geom_point(size = 4) + ggtitle("Run")
+plotPCA(vsd, intgroup="MappingRate", ntop=500) + geom_point(size = 4) + ggtitle("Mapping Rate")
+plotPCA(vsd, intgroup="ReadCount", ntop=500) + geom_point(size = 4) + ggtitle("Read Count")
+
+pcaData <- plotPCA(vsd, intgroup="Run", returnData=TRUE)
+write.xlsx(pcaData, colNames=TRUE, rowNames=TRUE, overwrite = TRUE, file="pca.xlsx")
+
+pdf('PCA.pdf',width=10, height=10)
+PCAfig
+dev.off()
+```
+
+### Manual calculation of PCA results from Variance Stabilizing Transformed (VSD) data
+
+```{r}
+# We begin by specifying the number of top variable genes (`ntop`) to use in the PCA analysis.
+ntop <- 500
+
+# Extract the variance-stabilizing transformation (VSD) matrix from the `vsd` object.
+mat <- assay(vsd)
+
+# Calculate row variances (gene-wise variances) from the matrix.
+mat.rv <- rowVars(mat)
+
+# Select the top `ntop` most variable genes by ordering row variances in decreasing order.
+rv.sel <- order(mat.rv, decreasing = TRUE)[seq_len(min(ntop, length(mat.rv)))]
+
+# Extract the matrix corresponding to the top variable genes.
+mat.sel <- assay(vsd)[rv.sel,]
+
+# Perform Principal Component Analysis (PCA) on the transposed matrix (genes in columns, samples in rows).
+pca.mat <- prcomp(t(mat.sel))
+
+# Convert the PCA results (principal components for each sample) to a data frame.
+pp.manual <- as.data.frame(pca.mat$x)
+
+# Print the PCA results for inspection.
+pp.manual
+
+# Save the PCA results (sample principal components) to an Excel file.
+write.xlsx(pp.manual, colNames = TRUE, rowNames = TRUE, overwrite = TRUE, file = "pca.manual.xlsx")
+
+# Save the PCA loadings (the contribution of each gene to the principal components) to a separate Excel file.
+write.xlsx(as.data.frame(pca.mat$rotation), colNames = TRUE, rowNames = TRUE, overwrite = TRUE, file = "pca.manual.rot.xlsx")
+```
+
+### Manual calculation of PCA results from log2 TPM-normalized data
+
+```{r}
+# Filter the dataset `assembleDat` to include only protein-coding genes with sufficient expression and variance.
+# Keep the log2-transformed TPM values (columns ending with ".l2tpm").
+l2tpm.pca <- assembleDat %>% filter(MPG == "Yes" &
+                                   gene_biotype == "protein_coding" &
+                                   LowExpLowVar == "No") %>% select(Row.names, ends_with(".l2tpm"))
+
+# Set the gene names (row names) as row names for the `l2tpm.pca` matrix.
+l2tpm.pca <- column_to_rownames(l2tpm.pca, "Row.names")
+
+# Convert the data frame to a matrix for further analysis.
+l2tpm.pca <- as.matrix(l2tpm.pca)
+
+# Define the number of top variable genes (`ntop`) to use in this PCA calculation.
+ntop <- 1500
+
+# Calculate the row variances (gene-wise variances) for the log2 TPM matrix.
+l2tpm.rv <- rowVars(l2tpm.pca)
+
+# Select the top `ntop` most variable genes based on the variances.
+l2tpm.sel <- order(l2tpm.rv, decreasing = TRUE)[seq_len(min(ntop, length(l2tpm.rv)))]
+
+# Subset the VSD matrix for the top variable genes.
+l2tpm.pca <- assay(vsd)[l2tpm.sel,]
+
+# Perform PCA on the transposed matrix (genes in columns, samples in rows).
+pca.l2tpm <- prcomp(t(l2tpm.pca))
+
+# Convert the PCA results (principal components for each sample) to a data frame.
+pp.l2 <- as.data.frame(pca.l2tpm$x)
+
+# Print the PCA results for inspection.
+pp.l2
+```
+
+
 ### Run tests vs Mock
 
 ```{r}
@@ -348,29 +444,6 @@ for (i in vs.UG.comparisons){
 }
 ```
 
-## Prepare an exploratory PCA plot
-
-By default, plotPCA using the 500 most variable genes for PCA 1 vs PCA 2 plots
-this can be adjusted with ntop argument
-
-```{r}
-vsd <- vst(dds, blind=FALSE)
- 
-samples$Day <- as.factor(samples$Day)
- 
-plotPCA(vsd, intgroup="Condition", ntop=500) + geom_point(size = 4) + ggtitle("Condition")
-plotPCA(vsd, intgroup="Infection", ntop=500) + geom_point(size = 4) + ggtitle("Infection")
-plotPCA(vsd, intgroup="Run", ntop=500) + geom_point(size = 4) + ggtitle("Run")
-plotPCA(vsd, intgroup="MappingRate", ntop=500) + geom_point(size = 4) + ggtitle("Mapping Rate")
-plotPCA(vsd, intgroup="ReadCount", ntop=500) + geom_point(size = 4) + ggtitle("Read Count")
-
-pcaData <- plotPCA(vsd, intgroup="Run", returnData=TRUE)
-write.xlsx(pcaData, colNames=TRUE, rowNames=TRUE, overwrite = TRUE, file="pca.xlsx")
-
-pdf('PCA.pdf',width=10, height=10)
-PCAfig
-dev.off()
-```
 
 # Differential Expression Testing - Complex model
 
