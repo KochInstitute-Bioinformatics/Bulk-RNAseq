@@ -350,8 +350,8 @@ for (i in vs.Mock.comparisons){
   stat <- dds@rowRanges@elementMetadata[,stat_col]
   res$stat <- stat
 
-  res <- res %>% select(c("log2FoldChange", "pvalue", "padj","stat"))
-  res <- res %>% mutate(absFC = abs(log2FoldChange))
+  res <- res %>% dplyr::select(c("log2FoldChange", "pvalue", "padj","stat"))
+  res <- res %>% dplyr::mutate(absFC = abs(log2FoldChange))
   res <- res %>% dplyr::mutate(negLogP = -log10(padj))
 
   colnames(res) <- paste(cleanCompar, colnames(res), sep = '.')
@@ -392,8 +392,8 @@ for (i in vs.PR.comparisons){
   stat <- dds@rowRanges@elementMetadata[,stat_col]
   res$stat <- stat
 
-  res <- res %>% select(c("log2FoldChange", "pvalue", "padj","stat"))
-  res <- res %>% mutate(absFC = abs(log2FoldChange))
+  res <- res %>% dplyr::select(c("log2FoldChange", "pvalue", "padj","stat"))
+  res <- res %>% dplyr::mutate(absFC = abs(log2FoldChange))
   res <- res %>% dplyr::mutate(negLogP = -log10(padj))
 
   colnames(res) <- paste(cleanCompar, colnames(res), sep = '.')
@@ -434,8 +434,8 @@ for (i in vs.UG.comparisons){
   stat <- dds@rowRanges@elementMetadata[,stat_col]
   res$stat <- stat
 
-  res <- res %>% select(c("log2FoldChange", "pvalue", "padj","stat"))
-  res <- res %>% mutate(absFC = abs(log2FoldChange))
+  res <- res %>% dplyr::select(c("log2FoldChange", "pvalue", "padj","stat"))
+  res <- res %>% dplyr::mutate(absFC = abs(log2FoldChange))
   res <- res %>% dplyr::mutate(negLogP = -log10(padj))
 
   colnames(res) <- paste(cleanCompar, colnames(res), sep = '.')

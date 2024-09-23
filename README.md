@@ -33,6 +33,6 @@ The analysis pipeline includes the following components:
 
 ## docker image for R environment available here:
 
-docker://bumproo/bulk_r441
+docker://yannvrb56/bulkrnaseq
 
 Bash script singularity_Rstudio_bulkRNAseq.sh will initialize singularity Rstudio connection.

@@ -76,7 +76,7 @@ cat 1>&2 <<END
       scancel -f ${SLURM_JOB_ID}
 END
 
-singularity exec --cleanenv -H $PWD:/home/rstudio docker://bumproo/bulk_r441 \
+singularity exec --cleanenv -H $PWD:/home/rstudio docker://yannvrb56/bulkrnaseq \
     /usr/lib/rstudio-server/bin/rserver --server-user ${USER} --www-port ${PORT} \
             --auth-none=0 \
             --auth-pam-helper-path=pam-helper \
