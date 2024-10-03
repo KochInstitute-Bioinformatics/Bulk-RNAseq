@@ -496,7 +496,7 @@ vol_df.edit <- vol_df.edit <- vol_df.edit %>% mutate_at(vars(ends_with(".log2Fol
 This may not be necessary but can help when there are a handful of genes with large -log10(adp)
 
 ```{r}
-#vol_df.edit <- vol_df.edit <- vol_df.edit %>% mutate_at(vars(ends_with(".padj")), ~ ifelse(adp < 1e-30, 1e-30, .))
+#vol_df.edit <- vol_df.edit <- vol_df.edit %>% mutate_at(vars(ends_with(".padj")), ~ ifelse(. < 1e-30, 1e-30, .))
 ```
 
 ### sets y axis according to max(abs(LFC))
