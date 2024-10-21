@@ -845,6 +845,8 @@ Extract protein coding genes from assembled data files, adjust the data and writ
 this code chunk prepares rnk files for Linux GSEA runs
 
 ```{r}
+system("mkdir -p ../gsea && chmod 775 ../gsea")
+
 rnkFile <- assembleDat %>% filter(MPG == "Yes" & gene_type == "protein_coding") %>% dplyr::select('gene_name',ends_with(".stat"))
 
 names <- colnames(rnkFile)
