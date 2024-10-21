@@ -978,6 +978,10 @@ df_summary <- combined_df %>%
   group_by(NAME, Comparison, Collection) %>%
   summarize(NES = mean(NES, na.rm = TRUE), FDR.q.val = mean(FDR.q.val, na.rm = TRUE), .groups = 'drop')
 
+# Remove suffixes like _h, _c2cp, etc. from 'Comparison' values to retain base comparison name
+df_summary <- df_summary %>%
+  mutate(Comparison = sub("(_h|_c[2-5].*)$", "", Comparison)) # Remove unwanted suffixes
+
 # Pivot the dataframe to get NES and FDR.q.val with correct column names
 pivoted_df <- df_summary %>%
   pivot_wider(names_from = Comparison, 
@@ -1003,10 +1007,10 @@ final_df <- final_df %>%
 # Sort final_df by MinFDR with smallest values at the top
 final_df <- final_df %>% arrange(MinFDR)
 
-# clean up column names for simplicity
-
+# Clean up column names for simplicity
 final_df <- final_df %>% rename_with(~ gsub("run_|\\.stat", "", .))
 
+# Save the final dataframe
 write.xlsx(final_df, "GSEA_pivot.xlsx")
 ```
 
