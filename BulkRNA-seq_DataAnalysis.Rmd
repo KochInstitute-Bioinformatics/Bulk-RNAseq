@@ -953,7 +953,8 @@ gsea_results.list <- lapply(gsea_results.list, function(x) {
 ### Assemble the data into a single output file and export the results
 
 ```{r}
-combined_df <- bind_rows(gsea_results.list, .id = "ComparisonFull")
+non_empty_dfs <- gsea_results.list[sapply(gsea_results.list, nrow) > 0]
+combined_df <- bind_rows(non_empty_dfs, .id = "ComparisonFull")
 
 #Use mutate and str_extract to create the new 'Collection' column
 combined_df <- combined_df %>%
