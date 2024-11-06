@@ -253,6 +253,22 @@ PCAfig
 dev.off()
 ```
 
+### PCA plots with sample labels
+
+In the example below, geom_label_repel is used to label points and axes are adjusted with the scale_x and scale_y components
+adjust values according to requirements presented by the data
+
+```{r,fig.height=12,fig.width=14}
+plotPCA(vsd, intgroup="Condition", ntop=500) + 
+  geom_point(size = 4) +
+  geom_label_repel(aes(label = Condition), vjust = -0.5, hjust = 0.5, 
+                   force = 2, min.segment.length = 0.1, max.overlaps = 100) +
+  scale_y_continuous(limits = c(-34, 34), breaks = seq(-34, 34, by = 2)) +
+scale_x_continuous(limits = c(-64, 64), breaks = seq(-64, 64, by = 2)) +
+  ggtitle("Condition")
+```
+
+
 ### Manual calculation of PCA results from Variance Stabilizing Transformed (VSD) data
 
 ```{r}
