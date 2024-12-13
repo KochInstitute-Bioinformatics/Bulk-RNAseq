@@ -634,8 +634,8 @@ This code:
 1) selects gene_name and differential expression data from the full data file
 2) converts the gene_name column to rowname
 3) removes all rows that contain NA in both LFC and padj columns
-4) replaces any NA fold changes with 1
-5) replaces any NA adp values with 0
+4) replaces any NA fold changes with 0
+5) replaces any NA adp values with 1
 6) round data to 3 digits
 6) converts gene symbol row names to column called "GeneSym"
 7) exports data to excel for upload to metacore
