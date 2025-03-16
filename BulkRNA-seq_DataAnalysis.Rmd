@@ -53,7 +53,7 @@ source('Rcode/data_formatting_tools.R')
 source('Rcode/analysis_tools.R')
 source('Rcode/plots.R')
 source('Rcode/common.R')
-source('Rcode/ssGSEAProjection.Library.R')
+source('Rcode/ssGSEA.Library.R')
 
 options(scipen = 9)
 ```
